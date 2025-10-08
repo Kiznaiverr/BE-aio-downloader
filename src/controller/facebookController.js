@@ -1,6 +1,6 @@
 import axios from "axios";
 import { load } from "cheerio";
-import qs from "querystring";
+// use URLSearchParams instead of deprecated 'querystring'
 
 class FacebookScraper {
   constructor() {
@@ -39,10 +39,10 @@ class FacebookScraper {
     }
 
     try {
-      const payload = qs.stringify({
+      const payload = new URLSearchParams({
         id: facebookUrl,
         locale: 'id'
-      });
+      }).toString();
 
       const response = await axios.post('https://getmyfb.com/process', payload, {
         headers: this.headers

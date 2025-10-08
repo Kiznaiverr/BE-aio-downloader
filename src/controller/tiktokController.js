@@ -1,5 +1,5 @@
 import axios from "axios";
-import qs from "querystring"; 
+// use URLSearchParams instead of deprecated 'querystring'
 
 const BASE_URL = "https://www.tikwm.com/api/";
 
@@ -9,13 +9,13 @@ async function tiktokDownload(tiktokUrl) {
   }
 
   try {
-    const payload = qs.stringify({
+    const payload = new URLSearchParams({
       url: tiktokUrl,
       count: 12,
       cursor: 0,
       web: 1,
       hd: 1,
-    });
+    }).toString();
 
     const { data } = await axios.post(BASE_URL, payload, {
       headers: {
