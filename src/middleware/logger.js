@@ -43,13 +43,17 @@ class APILogger {
     }).format(new Date())
   }
 
-  log(method, url, statusCode, responseTime) {
+  log(method, url, statusCode, responseTime, trailingIp) {
     const methodColor = this.colors[method] || this.colors.reset
     const statusColor = this.getStatusColor(statusCode)
     const cleanUrl = this.cleanUrl(url)
     const jakartaTime = this.formatJakartaTime()
     
-    const logMessage = `${methodColor}${method}${this.colors.reset} ${cleanUrl} ${statusColor}${statusCode}${this.colors.reset} ${this.formatResponseTime(responseTime)} - ${jakartaTime}`
+    let logMessage = `${methodColor}${method}${this.colors.reset} ${cleanUrl} ${statusColor}${statusCode}${this.colors.reset} ${this.formatResponseTime(responseTime)} - ${jakartaTime}`
+    if (trailingIp) {
+      logMessage += ` - from ip: ${trailingIp}`
+    }
+
     console.log(logMessage)
   }
 }
@@ -75,7 +79,15 @@ export function withLogging(handler) {
     const logResponse = () => {
       if (!hasEnded) {
         hasEnded = true
-        logger.log(req.method, req.originalUrl, statusCode, Date.now() - startTime)
+        const responseTime = Date.now() - startTime
+
+        if (statusCode === 429) {
+          const forwarded = req.headers['x-forwarded-for']
+          const ip = forwarded ? forwarded.split(',')[0].trim() : (req.ip || req.connection?.remoteAddress || 'unknown')
+          logger.log(req.method, req.originalUrl, statusCode, responseTime, ip)
+        } else {
+          logger.log(req.method, req.originalUrl, statusCode, responseTime)
+        }
       }
     }
 
@@ -110,8 +122,8 @@ export function withLogging(handler) {
   }
 }
 
-export function logRequest(req, statusCode, startTime) {
-  logger.log(req.method, req.url, statusCode, Date.now() - startTime)
+export function logRequest(req, statusCode, startTime, trailingIp) {
+  logger.log(req.method, req.url, statusCode, Date.now() - startTime, trailingIp)
 }
 
 export default logger
