@@ -2,7 +2,9 @@ const apiFormatter = (req, res, next) => {
   const originalJson = res.json;
   res.json = function(data) {
     if (data && typeof data === 'object' && 'success' in data) {
-      return originalJson.call(this, data);
+      const { author: _old, ...rest } = data
+      const withAuthorFirst = { author: 'kiznavierr', ...rest }
+      return originalJson.call(this, withAuthorFirst)
     }
 
     const isError = data.error || res.statusCode >= 400;
