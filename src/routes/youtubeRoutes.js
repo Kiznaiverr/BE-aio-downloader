@@ -9,11 +9,11 @@ router.post('/download', withLogging(async (req, res) => {
   const { url, format } = req.body;
 
   if (!url) {
-    return res.status(400).json({ error: 'YouTube URL is required' });
+    return res.status(400).json({ success: false, code: 400, data: null, message: 'YouTube URL is required' });
   }
 
   const result = await downloadYoutube(url, format);
-  res.json(result);
+  res.json({ success: true, code: 200, data: result });
 }));
 
 router.all('/search', withLogging(async (req, res) => {

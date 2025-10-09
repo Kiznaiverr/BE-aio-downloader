@@ -8,11 +8,11 @@ router.post('/download', withLogging(async (req, res) => {
   const { url } = req.body;
 
   if (!url) {
-    return res.status(400).json({ error: 'TikTok URL is required' });
+    return res.status(400).json({ success: false, code: 400, data: null, message: 'TikTok URL is required' });
   }
 
   const result = await tiktokDownload(url);
-  res.json(result);
+  res.json({ success: true, code: 200, data: result });
 }));
 
 export default router;
