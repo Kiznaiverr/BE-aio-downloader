@@ -1,96 +1,67 @@
 # BE AIO Downloader
 
-Backend service for downloading media from social media platforms.
+Proyek backend untuk mendownload konten dari berbagai platform sosial media seperti YouTube, TikTok, Instagram, Facebook, dan Twitter.
 
-## Description
+## Endpoint yang Tersedia
 
-This is a backend API service that allows downloading videos and audio from TikTok, YouTube, Instagram, and Facebook.
+### YouTube
+- **POST** `/api/youtube/download`
+  - Body: `{ "url": "https://www.youtube.com/watch?v=...", "format": "mp4" }` (format opsional)
+  - Deskripsi: Download video YouTube.
 
-## Features
+- **GET/POST** `/api/youtube/search`
+  - Query (GET): `?q=search_query&limit=10`
+  - Body (POST): `{ "query": "search_query", "limit": 10 }`
+  - Deskripsi: Cari video di YouTube.
 
-- Download videos from TikTok
-- Download videos/audio from YouTube
-- Download media from Instagram
-- Download videos/audio from Facebook
-- RESTful API endpoints
-- Rate limiting and security middleware
+### TikTok
+- **POST** `/api/tiktok/download`
+  - Body: `{ "url": "https://www.tiktok.com/..." }`
+  - Deskripsi: Download video TikTok.
 
-## Installation
+### Instagram
+- **POST** `/api/instagram/download`
+  - Body: `{ "url": "https://www.instagram.com/..." }`
+  - Deskripsi: Download konten Instagram (foto/video).
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file with your configuration (if needed)
-4. Start the server:
-   ```bash
-   npm start
-   ```
-   Or for development:
-   ```bash
-   npm run dev
-   ```
+### Facebook
+- **POST** `/api/facebook/download`
+  - Body: `{ "url": "https://www.facebook.com/..." }`
+  - Deskripsi: Download konten Facebook (video/post).
 
-## API Endpoints
+### Twitter
+- **POST** `/api/twitter/download`
+  - Body: `{ "url": "https://twitter.com/.../status/..." }`
+  - Deskripsi: Download konten Twitter (tweet/video).
 
-### Root
-- `GET /` - Welcome message with ASCII art
 
-### Health Check
-- `GET /health` - Server health status
+## Contoh Penggunaan
 
-### Download Endpoints
-- `POST /api/tiktok/download` - Download TikTok video
-- `POST /api/youtube/download` - Download YouTube video/audio
-- `POST /api/instagram/download` - Download Instagram media
-- `POST /api/facebook/download` - Download Facebook video/audio
-
-## Usage
-
-Send a POST request to the desired endpoint with JSON body containing the URL:
-
-```json
-{
-  "url": "https://example.com/video-url"
-}
+### Download YouTube Video
+```bash
+curl -X POST http://localhost:3000/api/youtube/download \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}'
 ```
 
-Example response:
+### Cari di YouTube
+```bash
+curl "http://localhost:3000/api/youtube/search?q=siapakah+myistri?&limit=5"
+```
+
+### Download TikTok
+```bash
+curl -X POST http://localhost:3000/api/tiktok/download \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.tiktok.com/@user/video/123456789"}'
+```
+
+Semua endpoint mengembalikan response dalam format JSON dengan struktur:
 ```json
 {
-  "author": "kiznavierr",
   "success": true,
   "code": 200,
-  "data": {
-    "id": "video_id",
-    "title": "Video Title",
-    "thumbnail": "thumbnail_url",
-    "videos": [
-      {
-        "quality": "720p(HD)",
-        "url": "download_url"
-      }
-    ],
-    "audio": {
-      "url": "audio_download_url"
-    }
-  }
+  "data": {...},
+  "message": "..."
 }
 ```
-
-## Technologies Used
-
-- Node.js
-- Express.js
-- Axios
-- Cheerio
-- WebSocket (for YouTube downloads)
-
-## Author
-
-kiznavierr
-
-## License
-
-ISC
