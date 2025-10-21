@@ -60,21 +60,30 @@ class TwitterScraper {
       const qualityBadge = card.find('.quality-badge').text().trim() || null;
 
       return {
-        id: url.split('/').pop(),
-        url,
-        title,
-        thumbnail,
-        quality: qualityBadge,
-        downloads: {
-          video: videoDownloads,
-          image: imageDownloads,
-          others: otherDownloads
+        status: true,
+        code: 200,
+        data: {
+          id: url.split('/').pop(),
+          url,
+          title,
+          thumbnail,
+          quality: qualityBadge,
+          downloads: {
+            video: videoDownloads,
+            image: imageDownloads,
+            others: otherDownloads
+          }
         }
       };
 
     } catch (err) {
       console.error('Twitter scrape error:', err.message);
-      throw err;
+      return {
+        status: false,
+        code: 500,
+        message: 'Failed to download from Twitter',
+        error: err.message
+      };
     }
   }
 }

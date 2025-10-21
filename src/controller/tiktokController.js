@@ -54,37 +54,46 @@ async function tiktokDownload(tiktokUrl) {
       : null;
 
     return {
-      id: d.id,
-      region: d.region,
-      title: d.title,
-      duration: d.duration,
-      cover: fullCover,
-      video: {
-        url: fullPlay,
-        hd_url: fullHdPlay
-      },
-      audio: {
-        url: musicUrl,
-        info: musicInfo
-      },
-      stats: {
-        views: d.play_count,
-        likes: d.digg_count,
-        comments: d.comment_count,
-        shares: d.share_count,
-        downloads: d.download_count,
-        favorites: d.collect_count,
-      },
-      author: {
-        id: d.author?.id,
-        username: d.author?.unique_id,
-        nickname: d.author?.nickname,
-        avatar: d.author?.avatar ? "https://www.tikwm.com" + d.author.avatar : null,
-      },
+      status: true,
+      code: 200,
+      data: {
+        id: d.id,
+        region: d.region,
+        title: d.title,
+        duration: d.duration,
+        cover: fullCover,
+        video: {
+          url: fullPlay,
+          hd_url: fullHdPlay
+        },
+        audio: {
+          url: musicUrl,
+          info: musicInfo
+        },
+        stats: {
+          views: d.play_count,
+          likes: d.digg_count,
+          comments: d.comment_count,
+          shares: d.share_count,
+          downloads: d.download_count,
+          favorites: d.collect_count,
+        },
+        author: {
+          id: d.author?.id,
+          username: d.author?.unique_id,
+          nickname: d.author?.nickname,
+          avatar: d.author?.avatar ? "https://www.tikwm.com" + d.author.avatar : null,
+        },
+      }
     };
   } catch (err) {
     console.error("Tikwm scrape error:", err.message);
-    throw err;
+    return {
+      status: false,
+      code: 500,
+      message: 'Failed to download from TikTok',
+      error: err.message
+    };
   }
 }
 

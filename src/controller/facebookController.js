@@ -71,15 +71,24 @@ class FacebookScraper {
       const audio = downloads.find(d => d.quality.toLowerCase().includes('mp3'));
 
       return {
-        id: facebookUrl.split('/').pop(),
-        title: title,
-        thumbnail: thumbnail,
-        videos: videos,
-        audio: audio ? { url: audio.url } : null
+        status: true,
+        code: 200,
+        data: {
+          id: facebookUrl.split('/').pop(),
+          title: title,
+          thumbnail: thumbnail,
+          videos: videos,
+          audio: audio ? { url: audio.url } : null
+        }
       };
     } catch (error) {
       console.error('Facebook scraping error:', error.message);
-      throw new Error('Failed to scrape Facebook media');
+      return {
+        status: false,
+        code: 500,
+        message: 'Failed to download from Facebook',
+        error: error.message
+      };
     }
   }
 

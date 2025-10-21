@@ -55,20 +55,29 @@ class InstagramScraper {
       const username = data.username || 'Unknown';
 
       return {
-        id: instagramUrl.split('/').pop(),
-        title: title,
-        username: username,
-        thumbnail: thumbnail,
-        video: videoUrl ? { url: videoUrl } : null,
-        image: imageUrls.length > 0 ? { url: imageUrls[0] } : null,
-        stats: {
-          likes: 0,
-          comments: 0,
+        status: true,
+        code: 200,
+        data: {
+          id: instagramUrl.split('/').pop(),
+          title: title,
+          username: username,
+          thumbnail: thumbnail,
+          video: videoUrl ? { url: videoUrl } : null,
+          image: imageUrls.length > 0 ? { url: imageUrls[0] } : null,
+          stats: {
+            likes: 0,
+            comments: 0,
+          }
         }
       };
     } catch (error) {
       console.error('Instagram scraping error:', error.response ? error.response.data : error.message);
-      throw new Error('Failed to scrape Instagram media');
+      return {
+        status: false,
+        code: 500,
+        message: 'Failed to download from Instagram',
+        error: error.message
+      };
     }
   }
 
