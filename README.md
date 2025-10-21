@@ -34,6 +34,19 @@ Proyek backend untuk mendownload konten dari berbagai platform sosial media sepe
   - Body: `{ "url": "https://twitter.com/.../status/..." }`
   - Deskripsi: Download konten Twitter (tweet/video).
 
+### Spotify
+- **POST** `/api/spotify/download`
+  - Body: `{ "url": "https://open.spotify.com/track/..." }`
+  - Deskripsi: Scrape data musik dari Spotify, cari di YouTube Music, lalu download sebagai audio.
+
+### AIO (All-in-One)
+- **GET/POST** `/api/aio/download`
+  - GET: `?url=https://...&format=720p` (format opsional)
+  - POST: Body: `{ "url": "https://...", "format": "720p" }` (format opsional)
+  - Deskripsi: Download otomatis berdasarkan platform URL (YouTube, TikTok, Instagram, Facebook, Twitter, Spotify).
+
+### Lainnya
+
 
 ## Contoh Penggunaan
 
@@ -54,6 +67,24 @@ curl "http://localhost:3000/api/youtube/search?q=siapakah+myistri?&limit=5"
 curl -X POST http://localhost:3000/api/tiktok/download \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.tiktok.com/@user/video/123456789"}'
+```
+
+### Download Spotify
+```bash
+curl -X POST http://localhost:3000/api/spotify/download \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://open.spotify.com/track/4iV5W9uYEdYUVa79Axb7Rh"}'
+```
+
+### Download AIO (Universal)
+```bash
+# GET
+curl "http://localhost:3000/api/aio/download?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&format=720p"
+
+# POST
+curl -X POST http://localhost:3000/api/aio/download \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.tiktok.com/@user/video/123456789", "format": "720p"}'
 ```
 
 Semua endpoint mengembalikan response dalam format JSON dengan struktur:
