@@ -21,7 +21,7 @@ Object.entries(routes).forEach(([path, router]) => {
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'hello from kiznavierr',
+    message: 'hello from kiznavierr, lagi males bikin UI jadi cuman ada API nya hehe',
     description : 'sometimes even reality is a lie',
     version: '1.0.0'
   });
